@@ -5,6 +5,16 @@
 
 `default_nettype none
 
+// binary up counter
+// 8 bits by default
+//
+// in terms of priority, async reset > sync load > cnt > hold
+//
+//   rst_n    load_en     q (after next clk edge)
+//     0       x   x      0 (immediately)
+//     1       1   x      d
+//     1       0   1      q + 1
+//     1       0   0      q (hold)
 module ayaant0_counter8 #(parameter WIDTH = 8) (
     input wire clk,
     input wire rst_n, // async reset (active low)
