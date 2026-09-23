@@ -1,8 +1,8 @@
 `default_nettype none
 `timescale 1ns / 1ps
 
-/* This testbench just instantiates the module and makes some convenient wires
-   that can be driven / tested by the cocotb test.py.
+/* This testbench instantiates the module, models uio pads as a tristate bus,
+  makes wires that can be used by cocotb
 */
 module tb ();
 
@@ -18,7 +18,7 @@ module tb ();
   reg rst_n;
   reg ena;
   reg [7:0] ui_in;
-  reg [7:0] uio_in;
+  wire [7:0] uio_in;
   wire [7:0] uo_out;
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
@@ -27,8 +27,22 @@ module tb ();
   wire VGND = 1'b0;
 `endif
 
-  // Replace tt_um_example with your module name:
-  tt_um_example user_project (
+  // model of the uio pads
+  reg ext_oe;
+  reg [7:0] ext_data;
+  wire [7:0] uio_bus;
+
+  genvar i;
+  generate
+    for (i = 0; i < 8; i = i + 1) begin : g_uio_pad
+      assign uio_bus[i] = uio_oe[i] ? uio_out[i] : 1'bz;
+    end
+  endgenerate
+
+  assign uio_bus = ext_oe ? ext_data : 8'bz;
+  assign uio_in  = uio_bus;
+
+  tt_um_ayaant0_counter user_project (
 
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST

@@ -32,6 +32,13 @@ tb.user_project.uio_in[7:0]
 tb.user_project.uio_oe[7:0]
 tb.user_project.uio_out[7:0]
 @200
+-uio Bus Model
+@28
+tb.ext_oe
+@22
+tb.ext_data[7:0]
+tb.uio_bus[7:0]
+@200
 -Output Pins
 @22
 tb.user_project.uo_out[7:0]
