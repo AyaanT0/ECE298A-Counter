@@ -5,6 +5,16 @@
 
 `default_nettype none
 
+// 8 bit counter
+// async reset, sync load, tristate outputs
+//
+// Pins:
+// rst_n        async reset(active low). immediately sets count=0
+// ui_in[0]     LOAD  sync load. count <= data on next clk egde (holds count if oe=1)
+// ui_in[1]     OE    output en. 1 = put count in data, 0 = hi-z
+// ui_in[2]     EN    count en: 1 = count up on every rising clk
+// uio[7:0]     DATA  tri state bus: counter out if oe=1, load input while oe=0
+// uo_out[7:0]  COUNT copy of count for monitoring
 module tt_um_ayaant0_counter (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
