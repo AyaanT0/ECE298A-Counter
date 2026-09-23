@@ -1,12 +1,9 @@
-# Sample testbench for a Tiny Tapeout project
+# Testbench for the 8 bit programmable counter
 
-This is a sample testbench for a Tiny Tapeout project. It uses [cocotb](https://docs.cocotb.org/en/stable/) to drive the DUT and check the outputs.
-See below to get started or for more information, check the [website](https://tinytapeout.com/hdl/testing/).
+This testbench uses cocotb to drive the design and check its outputs.
 
-## Setting up
-
-1. Edit [Makefile](Makefile) and modify `PROJECT_SOURCES` to point to your Verilog files.
-2. Edit [tb.v](tb.v) and replace `tt_um_example` with your module name.
+- [tb.v](tb.v) instantiates `tt_um_ayaant0_counter` and models the `uio` pads as a tristate bus. `ext_oe` and `ext_data` act as an external device on the bus, and `uio_bus` is the value on the pins, including Z and X.
+- [test.py](test.py) holds the tests. They only use the top level signals, so they run on the RTL and on the gate level netlist
 
 ## How to run
 
@@ -16,7 +13,7 @@ To run the RTL simulation:
 make -B
 ```
 
-To run gatelevel simulation, first harden your project and copy `../runs/wokwi/results/final/verilog/gl/{your_module_name}.v` to `gate_level_netlist.v`.
+To run the gate level sim, harden project and copy netlist of `tt_um_ayaant0_counter` to `gate_level_netlist.v`. `PDK_ROOT` has to point to the gf180 PDK install for the standard cell models. The GitHub Actions `gl_test` job sets all of this up automatically.
 
 Then run:
 

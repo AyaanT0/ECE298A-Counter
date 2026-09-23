@@ -1,23 +1,37 @@
-![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
+![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg)
 
-# Tiny Tapeout Verilog Project Template
+# 8 bit Programmable Counter
+
+Hello Professor John Long :)
+
+This is the 8 bit binary up counter w/ async reset, sync load, tri state outputs, and its for GF180.
+
+- `rst_n` clears the count immediately (does not wait for clock)
+- LOAD (`ui[0]`) loads the value on the DATA bus (`uio[7:0]`) on the next rising clock edge. While OE = 1 the bus is ignored and LOAD holds the count
+- OE (`ui[1]`) puts the count onto the DATA bus, unless OE = 0 then the bus is high impedance
+- EN (`ui[2]`) makes the counter count up on each rising clk edge
+- COUNT (`uo[7:0]`) shows the count
+
+Design is in [src/counter.v](src/counter.v) and [src/project.v](src/project.v). The cocotb tests are in [test/](test/), and the GitHub Actions build the GF180 layout, run the tests on the RTL and on the gate level netlist
 
 - [Read the documentation for project](docs/info.md)
+
+## Running the tests
+
+With iverilog and the Python packages in [test/requirements.txt](test/requirements.txt) installed:
+
+```sh
+cd test
+make -B
+```
+
+See [test/README.md](test/README.md) for the gate level simulation and for viewing the waveforms.
 
 ## What is Tiny Tapeout?
 
 Tiny Tapeout is an educational project that aims to make it easier and cheaper than ever to get your digital and analog designs manufactured on a real chip.
 
 To learn more and get started, visit https://tinytapeout.com.
-
-## Set up your Verilog project
-
-1. Add your Verilog files to the `src` folder.
-2. Edit the [info.yaml](info.yaml) and update information about your project, paying special attention to the `source_files` and `top_module` properties. If you are upgrading an existing Tiny Tapeout project, check out our [online info.yaml migration tool](https://tinytapeout.github.io/tt-yaml-upgrade-tool/).
-3. Edit [docs/info.md](docs/info.md) and add a description of your project.
-4. Adapt the testbench to your design. See [test/README.md](test/README.md) for more information.
-
-The GitHub action will automatically build the ASIC files using [LibreLane](https://www.zerotoasiccourse.com/terminology/librelane/).
 
 ## Enable GitHub actions to build the results page
 
@@ -30,13 +44,3 @@ The GitHub action will automatically build the ASIC files using [LibreLane](http
 - [Learn how semiconductors work](https://tinytapeout.com/siliwiz/)
 - [Join the community](https://tinytapeout.com/discord)
 - [Build your design locally](https://www.tinytapeout.com/guides/local-hardening/)
-
-## What next?
-
-- [Submit your design to the next shuttle](https://app.tinytapeout.com/).
-- Edit [this README](README.md) and explain your design, how it works, and how to test it.
-- Share your project on your social network of choice:
-  - LinkedIn [#tinytapeout](https://www.linkedin.com/search/results/content/?keywords=%23tinytapeout) [@TinyTapeout](https://www.linkedin.com/company/100708654/)
-  - Mastodon [#tinytapeout](https://chaos.social/tags/tinytapeout) [@matthewvenn](https://chaos.social/@matthewvenn)
-  - X (formerly Twitter) [#tinytapeout](https://twitter.com/hashtag/tinytapeout) [@tinytapeout](https://twitter.com/tinytapeout)
-  - Bluesky [@tinytapeout.com](https://bsky.app/profile/tinytapeout.com)
