@@ -5,7 +5,7 @@
 
 `default_nettype none
 
-module tt_um_example (
+module tt_um_ayaant0_counter (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -16,12 +16,27 @@ module tt_um_example (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-  assign uio_out = 0;
-  assign uio_oe  = 0;
+  wire load = ui_in[0];
+  wire oe = ui_in[1];
+  wire en = ui_in[2];
+
+  wire [7:0] count;
+  wire [7:0] load_data = oe ? count : uio_in;
+
+  ayaant0_counter8 #(.WIDTH(8)) counter (
+      .clk(clk),
+      .rst_n(rst_n),
+      .load(load),
+      .en(en),
+      .d(load_data),
+      .q(count)
+  );
+
+  assign uio_out = count;
+  assign uio_oe = {8{oe}};
+  assign uo_out = count;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+  wire _unused = &{ena, ui_in[7:3], 1'b0};
 
 endmodule
